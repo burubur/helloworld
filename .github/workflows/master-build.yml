@@ -1,4 +1,4 @@
-name: Build Binary
+name: Last Binary Build
 on: [push]
 jobs:
 
