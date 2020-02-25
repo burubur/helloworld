@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	CommitHash = ""
+	CommitHash = "000000"
 	checkErr   = func(err error) {
 		if err != nil && err != http.ErrServerClosed {
 			log.Println("something error while writing response", err.Error())
