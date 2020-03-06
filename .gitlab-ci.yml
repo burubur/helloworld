@@ -22,6 +22,11 @@ C. Unit Test:
         - uname -a
         - pwd
 
+D. Coverage:
+    stage: preparation
+    script:
+        - uname -a
+
 A. Integration Test:
     stage: test
     script:
