@@ -52,12 +52,12 @@ Staging:
     script:
         - ls -la
 
-Tag & Changelog:
+A. Tag & Changelog:
     stage: production
     script:
         - ls -la
 
-Production:
+B. Production:
     stage: production
     script:
         - ls -la
