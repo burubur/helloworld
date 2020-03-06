@@ -1,0 +1,63 @@
+image: golang:1.14.0-alpine3.11
+
+stages:
+    - preparation
+    - test
+    - staging
+    - production
+
+A. Component Check:
+    stage: preparation
+    script:
+        - ls -la
+
+B. Lint:
+    stage: preparation
+    script:
+        - ls -la
+
+C. Unit Test:
+    stage: preparation
+    script:
+        - uname -a
+        - pwd
+
+A. Integration Test:
+    stage: test
+    script:
+        - ls -la
+
+B. End to End Test:
+    stage: test
+    script:
+        - ls -la
+
+C. Load Test:
+    stage: test
+    script:
+        - ls -la
+
+D. Stress Test:
+    stage: test
+    script:
+        - ls -la
+
+E. Performance Test:
+    stage: test
+    script:
+        - ls -la
+
+Staging:
+    stage: staging
+    script:
+        - ls -la
+
+Changelog:
+    stage: production
+    script:
+        - ls -la
+
+Production:
+    stage: production
+    script:
+        - ls -la
