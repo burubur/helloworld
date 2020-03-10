@@ -12,6 +12,10 @@ indent_size = 4
 [.yml]
 indent_size = 2
 
-[{Makefile,go.mod,go.sum}]
+[{go.mod,go.sum}]
 indent_style = tab
 indent_size = 8
+
+[Makefile]
+indent_style = tab
+indent_size = 2
