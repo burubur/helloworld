@@ -1,14 +1,17 @@
 build:
-	@docker build . -t burhanmubarok/helloworld:0.0.5
+	docker build --rm --no-cache --progress=plain -t burhanmubarok/helloworld:0.5.3 .
 
 run:
-	@docker run -d -p 8080:8080 --name helloworld burhanmubarok/helloworld:0.0.5
+	docker run --rm -d -p 8080:8080 --name helloworld burhanmubarok/helloworld:0.5.3
+
+shell:
+	docker run --rm -it -p 8080:8080 --name helloworld burhanmubarok/helloworld:0.5.3
 
 start:
-	@docker start helloworld
+	docker start helloworld
 
 stop:
-	@docker stop helloworld
+	docker stop helloworld
 
 ping:
-	@curl localhost:8080
+	curl localhost:8080
