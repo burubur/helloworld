@@ -2,28 +2,34 @@
 
 ![Last Binary Build](https://github.com/burubur/helloworld/workflows/Last%20Binary%20Build/badge.svg)
 
-Just a containerised **HTTP** based **Helloworld** service.
+A containerised **HTTP** based **Helloworld** microservice.
 
 ## Prerequisites
 
 - [Docker](https://www.docker.com/)
 - [Golang](https://golang.org/)
-- **Unused port 8080**
+- **Unused port on 8080**
 
 ## Installation
 
-```shell script
+```shell
 make build
 ```
 
 ## How to Run The Service
 
-```shell script
+```shell
 make run
 ```
 
 ## How to Test The Running Service
 
-```shell script
+```shell
 make ping
+```
+
+## How to Login to The Running Container
+
+```shell
+make shell
 ```
