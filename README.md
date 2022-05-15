@@ -30,6 +30,8 @@ make ping
 
 ## How to Login to The Running Container
 
+> The command below require the `make run` to be performed successfully
+
 ```shell
 make shell
 ```
