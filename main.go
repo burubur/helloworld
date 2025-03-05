@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,7 +16,7 @@ import (
 var (
 	CommitHash = "000000"
 	checkErr   = func(err error) {
-		if err != nil && err != http.ErrServerClosed {
+		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Println("something error while writing response", err.Error())
 		}
 	}
