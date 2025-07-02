@@ -4,6 +4,9 @@
 
 A containerised **HTTP** based **Helloworld** microservice.
 
+Exposed endpoints:
+- localhost:8080/ping
+
 ## Prerequisites
 
 - [Docker](https://www.docker.com/)
