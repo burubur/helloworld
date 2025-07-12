@@ -5,7 +5,7 @@ import (
     "encoding/json"
     "errors"
     "fmt"
-    "log"
+    "log/slog"
     "net/http"
     "os"
     "os/signal"
@@ -13,22 +13,10 @@ import (
     "time"
 )
 
-var (
-    CommitHash = "000000"
-    checkErr   = func(err error) {
-        if err != nil && !errors.Is(err, http.ErrServerClosed) {
-            applog.Println("something error while writing response", err.Error())
-        }
-    }
-)
-
 const (
     port               = 8080
     defGracefulTimeout = 60 * time.Second
 )
-
-var applog = log.New(os.Stdout, "bcknd", log.Ldate|log.Ltime|log.Lshortfile)
-var syslog = log.New(os.Stderr, "bcknd", log.Ldate|log.Ltime|log.Lshortfile)
 
 type resp struct {
     Code    string      `json:"code"`
@@ -38,26 +26,39 @@ type resp struct {
     Version string      `json:"version"`
 }
 
+var (
+    commitHash = "000000"
+    checkErr   = func(err error) {
+        if err != nil && !errors.Is(err, http.ErrServerClosed) {
+            slog.Error("something error while writing response", slog.Any("error", err))
+        }
+    }
+)
+
 func main() {
-    applog.Printf("started open API server version: %s on PORT: %d", CommitHash, port)
+    var logHandler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
+    var customSlog = slog.New(logHandler)
+    slog.SetDefault(customSlog)
+
+    slog.Debug("started open API server version: %s on PORT: %d", commitHash, port)
     response := resp{
         Code:    "SUCCESS",
         Message: "Hello world!",
-        Version: CommitHash,
+        Version: commitHash,
     }
     marshaledResp, err := json.MarshalIndent(response, "", "  ")
     if err != nil {
-        applog.Println("something error while marshaling response", err.Error())
+        slog.Error("something error while marshaling response", slog.Any("error", err))
     }
 
     pong := resp{
         Code:    "PONG",
         Message: "pong",
-        Version: CommitHash,
+        Version: commitHash,
     }
     marshaledPong, err := json.MarshalIndent(pong, "", "  ")
     if err != nil {
-        applog.Println("something error while marshaling response", err.Error())
+        slog.Error("something error while marshaling response", slog.Any("error", err))
     }
 
     mux := http.NewServeMux()
@@ -94,23 +95,23 @@ func main() {
     <-terminationCH
     err = server.Shutdown(mainCtx)
     if err != nil {
-        syslog.Println("something error while shutting down the server", err.Error())
+        slog.Error("something error while shutting down the server", slog.Any("error", err))
     }
-    applog.Println(fmt.Sprintf("stopped open API on port: %d", port))
+    slog.Debug(fmt.Sprintf("stopped open API on port: %d", port))
 }
 
 func shutdownHook() func(chan struct{}) {
     return func(processingCH chan struct{}) {
-        go func(proCH chan struct{}) {
+        go func(procCH chan struct{}) {
             interruptionSignal := make(chan os.Signal, 1)
             signal.Notify(interruptionSignal, syscall.SIGINT, syscall.SIGTERM, syscall.SIGUSR1, syscall.SIGUSR2)
 
             // watch interruption signal
             terminationSignal := <-interruptionSignal
-            syslog.Println(fmt.Sprint("caught interruption signal: ", terminationSignal))
+            slog.Debug("caught interruption signal", "signal", terminationSignal)
 
             // send interruption signal to the client through the registered channel
-            proCH <- struct{}{}
+            procCH <- struct{}{}
 
             // stop relaying incoming signals
             signal.Stop(interruptionSignal)
