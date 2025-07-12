@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine3.15
+FROM golang:1.24.5-alpine3.22
 
 # install os dependencies & utilitiess
 RUN apk update && apk add --no-cache git
